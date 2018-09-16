@@ -6,13 +6,13 @@
 
 let
   inherit (pkgs) callPackage;
-  wire-desktop = callPackage ./wire-desktop.nix {};
+  wire-desktop = callPackage ../applications/wire-desktop.nix {};
 
 in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  # imports =
+  #  [ # Include the results of the hardware scan.
+  #    ./hardware-configuration.nix
+  #  ];
 
   # :'(
   nixpkgs.config = {
