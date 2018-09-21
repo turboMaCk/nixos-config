@@ -17,6 +17,14 @@ in {
   # :'(
   nixpkgs.config = {
     allowUnfree = true;
+
+    # chromium setup
+    chromium = {
+      # DRM shit for chromiume
+      # enableWideVine = true;
+      # enablePepperFlash = true;
+      # enablePepperPDF = true;
+    };
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -58,7 +66,7 @@ in {
     xterm
     dmenu
     haskellPackages.xmobar
-    docker
+    docker_compose
     dropbox
     screenfetch
     feh
@@ -70,6 +78,12 @@ in {
     wire-desktop
     transmission-gtk
     vlc
+    obs-studio
+    gcc
+    gnumake
+    nodejs-8_x
+    elmPackages.elm
+    elmPackages.elm-format
   ];
 
   # Zsh
@@ -83,11 +97,18 @@ in {
     enable = true;
     enableSSHSupport = true;
   };
+  services.pcscd.enable = true;
+  environment.shellInit = ''
+    gpg-connect-agent /bye
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+  '';
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
+  # ? I'm using GPG for ssh instead ?
   # services.openssh.enable = true;
+  # programs.ssh.startAgent = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -103,7 +124,7 @@ in {
   hardware.pulseaudio.enable = true;
 
 
-  # fonts 
+  # Fonts
   fonts = {
     enableFontDir = true;
     enableGhostscriptFonts = true;
@@ -124,32 +145,27 @@ in {
     ];
   };
 
-
-  # Enable touchpad support.
-  # services.xserver.
-  
-
-   # X11 settings
+  # X11 settings
   services.xserver = {
     enable = true;
     layout = "us";
     xkbOptions = "eurosign:e";
     dpi = 130;
     libinput.enable = false; # touchbar
-  
+
     # Display Manager
     displayManager = {
        sddm.enable = true;
        lightdm.enable = false;
     };
-  
+
     desktopManager = {
       plasma5.enable = true;
       gnome3.enable = false;
       xfce.enable = false;
       default = "plasma5";
    };
-  
+
     # Xmonad
     windowManager.xmonad = {
       enable = true;
@@ -166,10 +182,11 @@ in {
   services.compton = {
     enable          = true;
     fade            = true;
-    inactiveOpacity = "0.9";
+    inactiveOpacity = "1.0";
     shadow          = true;
     fadeDelta       = 4;
   };
+
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.marek = {
@@ -186,7 +203,7 @@ in {
   hardware.pulseaudio.support32Bit = true;
 
   ## SYSTEMD
-  
+
   systemd.user.services."urxvtd" = {
     enable = true;
     description = "rxvt unicode daemon";
@@ -207,5 +224,4 @@ in {
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
-
 }
