@@ -10,8 +10,10 @@
      # ./hardware-configuration.nix
      ../profiles/base.nix
      ../profiles/desktop.nix
-     ../profiles/virtualization.nix
      ../users/marek.nix
+     ../profiles/virtualization.nix
+     ../profiles/nodejs.nix
+     ../profiles/elm.nix
    ];
 
   # Use the systemd-boot EFI boot loader.

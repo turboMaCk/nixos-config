@@ -32,8 +32,6 @@ in {
 
         # work
         nodejs-8_x
-        elmPackages.elm
-        elmPackages.elm-format
         yarn
     ];
   };
