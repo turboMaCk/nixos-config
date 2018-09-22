@@ -19,13 +19,13 @@ in {
     shell = pkgs.zsh;
 
     packages = with pkgs; [
+        rxvt_unicode
         steam
         browserpass
         dropbox
         obs-studio
         slack
         spotify
-        firefox
         emacs
         wire-desktop
         ranger

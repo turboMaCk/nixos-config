@@ -8,21 +8,11 @@
   imports =
    [ # Include the results of the hardware scan.
      # ./hardware-configuration.nix
+     ../profiles/base.nix
+     ../profiles/desktop.nix
+     ../profiles/virtualization.nix
      ../users/marek.nix
    ];
-
-  # :'(
-  nixpkgs.config = {
-    allowUnfree = true;
-
-    # chromium setup
-    chromium = {
-      # DRM shit for chromiume
-      # enableWideVine = true;
-      # enablePepperFlash = true;
-      # enablePepperPDF = true;
-    };
-  };
 
   # Use the systemd-boot EFI boot loader.
   boot = {
@@ -38,67 +28,19 @@
     wireless.enable = false;  # Enables wireless support via wpa_supplicant.
   };
 
-  # Select internationalisation properties.
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
-  };
-
   # Set your time zone.
   time.timeZone = "Europe/Prague";
 
+  services.xserver.libinput.enable = false; # touchbar
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-
-    # essentials
-    wget
-    vim_configurable
-    chromium
-    git
-    pass
-    rxvt_unicode
-    xterm
-    dmenu
-    haskellPackages.xmobar
-    gnupg
-    python
-    python3
-    gcc
-    gnumake
-
-    # utils
-    feh
-    htop
-    docker_compose
-
-    # media
-    transmission-gtk
-    vlc
-  ];
+  environment.systemPackages = with pkgs; [];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
-
-  # SHELL
-
-  programs.zsh.enable = true;
-
-
-  # GnuPG
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-  services.pcscd.enable = true;
-  environment.shellInit = ''
-    gpg-connect-agent /bye
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-  '';
-
 
   # List services that you want to enable:
 
@@ -129,79 +71,6 @@
 
     # OpenGL
     opengl.driSupport32Bit = true;
-  };
-
-  # Fonts
-  fonts = {
-    enableFontDir = true;
-    enableGhostscriptFonts = true;
-    fonts = with pkgs; [
-      anonymousPro
-      corefonts
-      dejavu_fonts
-      font-droid
-      freefont_ttf
-      google-fonts
-      inconsolata
-      liberation_ttf
-      powerline-fonts
-      source-code-pro
-      terminus_font
-      ttf_bitstream_vera
-      ubuntu_font_family
-    ];
-  };
-
-  # X11 settings
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    xkbOptions = "eurosign:e";
-    dpi = 130;
-    libinput.enable = false; # touchbar
-
-    # Display Manager
-    displayManager = {
-       sddm.enable = true;
-       lightdm.enable = false;
-    };
-
-    desktopManager = {
-      plasma5.enable = true;
-      gnome3.enable = false;
-      xfce.enable = false;
-      default = "plasma5";
-   };
-
-    # Xmonad
-    windowManager.xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-      extraPackages = haskellPackages: [
-         haskellPackages.xmonad-contrib
-         haskellPackages.xmonad-extras
-         haskellPackages.xmonad
-      ];
-    };
- };
-
-  # compton
-  services.compton = {
-    enable          = true;
-    fade            = true;
-    inactiveOpacity = "1.0";
-    shadow          = true;
-    fadeDelta       = 4;
-  };
-
-  # Virtualization & Docker
-
-  virtualisation = {
-    docker.enable = true;
-
-    virtualbox = {
-        host.enable = true;
-    };
   };
 
   # This value determines the NixOS release with which your system is to be
