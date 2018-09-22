@@ -60,7 +60,6 @@ in {
     vim_configurable
     chromium
     git
-    emacs
     pass
     rxvt_unicode
     xterm
@@ -74,6 +73,7 @@ in {
     # utils
     feh
     htop
+    docker_compose
 
     # media
     transmission-gtk
@@ -204,22 +204,22 @@ in {
     extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
     shell = pkgs.zsh;
 
-    packages = [
-        pkgs.steam
-        pkgs.browserpass
-        pkgs.dropbox
-        pkgs.obs-studio
-        pkgs.slack
-        pkgs.spotify
-        pkgs.firefox
+    packages = with pkgs; [
+        steam
+        browserpass
+        dropbox
+        obs-studio
+        slack
+        spotify
+        firefox
+        emacs
         wire-desktop
 
         # work
-        pkgs.nodejs-8_x
-        pkgs.elmPackages.elm
-        pkgs.elmPackages.elm-format
-        pkgs.yarn
-        pkgs.docker_compose
+        nodejs-8_x
+        elmPackages.elm
+        elmPackages.elm-format
+        yarn
     ];
   };
 
