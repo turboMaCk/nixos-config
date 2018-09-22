@@ -4,15 +4,12 @@
 
 { config, pkgs, ... }:
 
-let
-  inherit (pkgs) callPackage;
-  wire-desktop = callPackage ../applications/wire-desktop.nix {};
-
-in {
-  # imports =
-  #  [ # Include the results of the hardware scan.
-  #    ./hardware-configuration.nix
-  #  ];
+{
+  imports =
+   [ # Include the results of the hardware scan.
+     # ./hardware-configuration.nix
+     ../users/marek.nix
+   ];
 
   # :'(
   nixpkgs.config = {
@@ -67,6 +64,7 @@ in {
     haskellPackages.xmobar
     gnupg
     python
+    python3
     gcc
     gnumake
 
@@ -194,45 +192,6 @@ in {
     inactiveOpacity = "1.0";
     shadow          = true;
     fadeDelta       = 4;
-  };
-
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.marek = {
-    isNormalUser = true;
-    uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
-    shell = pkgs.zsh;
-
-    packages = with pkgs; [
-        steam
-        browserpass
-        dropbox
-        obs-studio
-        slack
-        spotify
-        firefox
-        emacs
-        wire-desktop
-
-        # work
-        nodejs-8_x
-        elmPackages.elm
-        elmPackages.elm-format
-        yarn
-    ];
-  };
-
-  ## SYSTEMD
-
-  systemd.user.services."urxvtd" = {
-    enable = true;
-    description = "rxvt unicode daemon";
-    wantedBy = [ "default.target" ];
-    path = [ pkgs.rxvt_unicode ];
-    serviceConfig.Restart = "always";
-    serviceConfig.RestartSec = 2;
-    serviceConfig.ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd -q -o";
   };
 
   # Virtualization & Docker
