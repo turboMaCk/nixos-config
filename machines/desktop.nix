@@ -14,6 +14,7 @@
      ../profiles/virtualization.nix
      ../profiles/nodejs.nix
      ../profiles/elm.nix
+     ../profiles/haskell.nix
    ];
 
   # Use the systemd-boot EFI boot loader.
@@ -66,7 +67,6 @@
 
   # HW support
   hardware = {
-
     # Sound config
     pulseaudio.enable = true;
     pulseaudio.support32Bit = true;

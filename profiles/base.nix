@@ -2,16 +2,17 @@
 
 {
   environment.systemPackages = with pkgs; [
+    python
+    python3
+    (vim_configurable.override { python3 = true; })
     wget
-    vim_configurable
     git
     pass
     gnupg
-    python
-    python3
     gcc
     gnumake
     htop
+    nix-prefetch-scripts
   ];
 
   # Select internationalisation properties.
