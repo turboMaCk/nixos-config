@@ -54,45 +54,43 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+
+    # essentials
     wget
     vim_configurable
-    firefox
     chromium
     git
     emacs
     pass
-    browserpass
     rxvt_unicode
     xterm
     dmenu
     haskellPackages.xmobar
-    docker_compose
-    dropbox
-    screenfetch
-    feh
-    htop
-    spotify
     gnupg
-    slack
     python
-    wire-desktop
-    transmission-gtk
-    vlc
-    obs-studio
     gcc
     gnumake
-    nodejs-8_x
-    elmPackages.elm
-    elmPackages.elm-format
-  ];
 
-  # Zsh
-  programs.zsh.enable = true;
+    # utils
+    feh
+    htop
+
+    # media
+    transmission-gtk
+    vlc
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
+
+  # SHELL
+
+  programs.zsh.enable = true;
+
+
+  # GnuPG
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
@@ -103,10 +101,12 @@ in {
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
   '';
 
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   # ? I'm using GPG for ssh instead ?
+
   # services.openssh.enable = true;
   # programs.ssh.startAgent = true;
 
@@ -121,8 +121,17 @@ in {
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
 
+  # HW support
+  hardware = {
+
+    # Sound config
+    pulseaudio.enable = true;
+    pulseaudio.support32Bit = true;
+
+    # OpenGL
+    opengl.driSupport32Bit = true;
+  };
 
   # Fonts
   fonts = {
@@ -194,13 +203,25 @@ in {
     uid = 1000;
     extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
     shell = pkgs.zsh;
-  };
 
-  users.users.marek.packages = [
-    pkgs.steam
-  ];
-  hardware.opengl.driSupport32Bit = true;
-  hardware.pulseaudio.support32Bit = true;
+    packages = [
+        pkgs.steam
+        pkgs.browserpass
+        pkgs.dropbox
+        pkgs.obs-studio
+        pkgs.slack
+        pkgs.spotify
+        pkgs.firefox
+        wire-desktop
+
+        # work
+        pkgs.nodejs-8_x
+        pkgs.elmPackages.elm
+        pkgs.elmPackages.elm-format
+        pkgs.yarn
+        pkgs.docker_compose
+    ];
+  };
 
   ## SYSTEMD
 
@@ -214,10 +235,15 @@ in {
     serviceConfig.ExecStart = "${pkgs.rxvt_unicode}/bin/urxvtd -q -o";
   };
 
-  # Virtualization
+  # Virtualization & Docker
 
-  virtualisation.docker.enable = true;
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation = {
+    docker.enable = true;
+
+    virtualbox = {
+        host.enable = true;
+    };
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
